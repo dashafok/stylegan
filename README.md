@@ -1,7 +1,3 @@
-## Application of StyleGAN for textures 
-
-forked from https://github.com/NVlabs/stylegan
-
 ## StyleGAN &mdash; Official TensorFlow Implementation
 ![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg?style=plastic)
 ![TensorFlow 1.10](https://img.shields.io/badge/tensorflow-1.10-green.svg?style=plastic)
