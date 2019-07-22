@@ -23,29 +23,37 @@ def main():
     # url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
     #with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
     
-    with open('results/00003-sgan-custom-1gpu/network-snapshot-005306.pkl', 'rb') as f:
+    with open('/mnt/stylegan/berea_checkpoints/network-snapshot-004085.pkl', 'rb') as f:
         _G, _D, Gs = pickle.load(f)
         # _G = Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.
         # _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
         # Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
     alpha = 0
+    num_samples = 80
     # Print network details.
     Gs.print_layers()
 
     # Pick latent vector.
     rnd = np.random.RandomState(5)
     #latents1 = rnd.randn(1, Gs.input_shape[1])
-    latents = rnd.randn(1, Gs.input_shape[1])
+    for i in range(1125):
+        latents = rnd.randn(num_samples, Gs.input_shape[1])
 
-    #latents = alpha*latents1 + alpha*latents2
-    # Generate image.
-    fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+        #latents = alpha*latents1 + alpha*latents2
+        # Generate image.
+        fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
 
-    # Save image.
-    os.makedirs(config.result_dir, exist_ok=True)
-    png_filename = os.path.join(config.result_dir, 'example_.png')
-    PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
+        # Save image.
+        os.makedirs(config.result_dir, exist_ok=True)
+        png_filename = os.path.join(config.result_dir, 'example_.png')
+        '''
+        for i in range(num_samples):
+            png_filename = os.path.join(config.result_dir, 'example_{}.png'.format(i+1))
+            PIL.Image.fromarray(images[i], 'RGB').save(png_filename)
+        '''
+        np.save('/mnt/stylegan/result/ketton/ketton_result_64_{}.pkl'.format(i+1), images)
+
 
 if __name__ == "__main__":
     main()
